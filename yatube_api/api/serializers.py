@@ -18,8 +18,14 @@ class Base64ImageField(serializers.ImageField):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = SlugRelatedField(slug_field='username', read_only=True)
-    image = Base64ImageField(required=False, allow_null=True)
+    author = SlugRelatedField(
+        slug_field='username',
+        read_only=True
+    )
+    image = Base64ImageField(
+        required=False,
+        allow_null=True
+    )
 
     class Meta:
         fields = '__all__'
@@ -28,7 +34,8 @@ class PostSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(
-        read_only=True, slug_field='username'
+        read_only=True,
+        slug_field='username'
     )
 
     class Meta:
