@@ -44,7 +44,7 @@ python3 manage.py runserver
 ```
 
 ### * описание ресурса;
-###### API oснован на DJANGO REST framework.  API обеспечивает обращение в формате JSON к следующим моделям проекта: Post, Group, Comment и возвращает ответ на данные обращения.
+###### API oснован на DJANGO REST framework.  API обеспечивает обращение в формате JSON к следующим моделям проекта: Post, Group, Comment, Follow и возвращает ответ на данные обращения.
 
 ### * конечные точки и методы;
 
