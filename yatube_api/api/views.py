@@ -1,7 +1,9 @@
 from django.shortcuts import get_object_or_404
 from posts.models import Comment, Group, Post
 from rest_framework import filters, permissions, viewsets
+from rest_framework.mixins import CreateModelMixin, ListModelMixin
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.viewsets import GenericViewSet
 
 from .permissions import IsOwnerOrReadOnly
 from .serializers import (CommentSerializer, FollowSerializer, GroupSerializer,
@@ -17,16 +19,6 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
-
-    # def perform_update(self, serializer):
-    #     if serializer.instance.author != self.request.user:
-    #         raise PermissionDenied('Изменение чужого контента запрещено!')
-    #     super(PostViewSet, self).perform_update(serializer)
-    #
-    # def perform_destroy(self, serializer):
-    #     if serializer.author != self.request.user:
-    #         raise PermissionDenied('Изменение чужого контента запрещено!')
-    #     super(PostViewSet, self).perform_destroy(serializer)
 
 
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
@@ -50,18 +42,8 @@ class CommentViewSet(viewsets.ModelViewSet):
         post = get_object_or_404(Post, id=self.kwargs['post_id'])
         serializer.save(author=self.request.user, post=post)
 
-    # def perform_update(self, serializer):
-    #     if serializer.instance.author != self.request.user:
-    #         raise PermissionDenied('Изменение чужого контента запрещено!')
-    #     super(CommentViewSet, self).perform_update(serializer)
-    #
-    # def perform_destroy(self, serializer):
-    #     if serializer.author != self.request.user:
-    #         raise PermissionDenied('Изменение чужого контента запрещено!')
-    #     super(CommentViewSet, self).perform_destroy(serializer)
 
-
-class FollowViewSet(viewsets.ModelViewSet):
+class FollowViewSet(CreateModelMixin, ListModelMixin, GenericViewSet):
     serializer_class = FollowSerializer
     permission_classes = (permissions.IsAuthenticated,)
     filter_backends = (filters.SearchFilter,)
